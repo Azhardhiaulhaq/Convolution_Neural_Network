@@ -3,6 +3,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
+import cv2
 
 
 class Convolution:
@@ -22,27 +23,17 @@ class Convolution:
         self.bias = 0
 
     def get_red_matrix(self, image):
-        result = image.copy()
-        result[:, :, 1] = 0
-        result[:, :, 2] = 0
-        return result
+        return image[:,:,2]
 
     def get_green_matrix(self, image):
-        result = image.copy()
-        result[:, :, 0] = 0
-        result[:, :, 2] = 0
-        return result
+        return image[:,:,1]
 
     def get_blue_matrix(self, image):
-        result = image.copy()
-        result[:, :, 0] = 0
-        result[:, :, 1] = 0
-        return result
+        return image[:,:,0]
 
     def convolution(self, input_layer):
 
         self.filters = np.random.choice([-1,0,1],size = (self.num_filter,len(input_layer),self.filter_size,self.filter_size))
-        
         input_layer = self.resize_matrix(input_layer)
         feature_map_size = (
             (len(input_layer[0]) - len(self.filters[0][0]) ) / self.stride_size) + 1
@@ -56,7 +47,8 @@ class Convolution:
         layer = []
         for matrix in layer_matrix:
             layer.append(self.add_padding(
-                np.resize(matrix, (self.input_size, self.input_size))))
+                cv2.resize(matrix,dsize=(self.input_size, self.input_size),interpolation=cv2.INTER_CUBIC)))
+
 
         return layer
 
@@ -65,14 +57,14 @@ class Convolution:
 
 
     def forward_propagation(self,feature_map_size,input_layer,filters) :
-        feature_map = np.zeros((len(filters),feature_map_size,feature_map_size))
+        feature_map = np.zeros((len(filters),feature_map_size,feature_map_size),dtype=np.uint8)
         for i in range(len(filters)):
             feature_map[i] = self.count_feature_map(feature_map_size,input_layer,filters[i])
         return feature_map
         
     def count_feature_map(self,feature_map_size,input_layer,filter):
-        feature_map = np.zeros((feature_map_size,feature_map_size))
-        kernel_feature_map = np.zeros((len(filter),feature_map_size,feature_map_size))
+        feature_map = np.zeros((feature_map_size,feature_map_size),dtype=np.uint8)
+        kernel_feature_map = np.zeros((len(filter),feature_map_size,feature_map_size),dtype=np.uint8)
         for i in range(len(kernel_feature_map)):
             for j in range(feature_map_size): 
                 for k in range(feature_map_size):
@@ -94,15 +86,26 @@ class Convolution:
 
 
 
-# convo = Convolution(input_size = 300, filter_size = 2,num_filter =  3,padding_size= 0,stride_size= 1)
+convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+matrix_img = cv2.imread('cats/cat.0.jpg')
+input_layer = list()
+input_layer.append(convo.get_red_matrix(matrix_img))
+input_layer.append(convo.get_green_matrix(matrix_img))
+input_layer.append(convo.get_blue_matrix(matrix_img))
+feature_map = convo.convolution(input_layer)
+print(":::")
+print(feature_map)
+img = Image.fromarray(feature_map[0])
+img.show()
+
+# img = cv2.imread('cats/cat.0.jpg')
+# print(image)
+# cv2.imshow("Image",image)
+# cv2.waitKey()
 # img = Image.open('cats/cat.0.jpg')
 # matrix_img = np.array(img)
-# input_layer = list()
-# # input_layer.append([[252,251,246,207,90],[250,242,236,144,41],[252,244,228,102,43],[250,243,214,59,52],[248,243,201,44,54]])
-# # print(input_layer)
-# input_layer.append(convo.get_red_matrix(matrix_img))
-# input_layer.append(convo.get_green_matrix(matrix_img))
-# input_layer.append(convo.get_blue_matrix(matrix_img))
-# feature_map = convo.convolution(input_layer)
-# print(":::")
-# print(feature_map)
+
+
+
+
+
