@@ -96,6 +96,36 @@ def relu(input):
             if input[i][j] < 0:
                 input[i][j] = 0  
 
+class Pooling:
+    def __init__(self, 
+    filter_size, 
+    stride_size,
+    mode):
+
+        super().__init__()
+        self.filter_size = filter_size
+        self.stride_size = stride_size
+        self.mode = mode
+    
+    def count_feature_map_size(self, input):
+        return (len(input) / self.stride_size) + 1
+    
+    def pooling_mat(self, input, feature_map_size):
+        feature_map = np.zeros((feature_map_size,feature_map_size),dtype=np.uint8)
+        # TODO Implement pooling
+        return feature_map
+
+    def pooling(self, input_layer):
+        feature_maps = []
+        feature_map_size = self.count_feature_map_size(input_layer[0])
+        if not feature_map_size.is_integer():
+            return None
+        for layer in input_layer:
+            feature_maps.append(self.pooling_mat(
+                layer, 
+                feature_map_size))
+        return feature_maps
+    
 mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
 relu(mat)
 print(mat)
