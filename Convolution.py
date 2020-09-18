@@ -37,13 +37,10 @@ class Convolution:
 
         self.filters = np.random.choice([-1,0,1],size = (self.num_filter,len(input_layer),self.filter_size,self.filter_size))
         input_layer = self.resize_matrix(input_layer)
-        feature_map_size = (
-            (len(input_layer[0]) - len(self.filters[0][0]) ) / self.stride_size) + 1
-        if(not feature_map_size.is_integer() or not feature_map_size > 0):
-            print("Feature Map Size is Not Integer")
-        else:
-            feature_map = self.forward_propagation(int(feature_map_size),input_layer,self.filters)
-            return feature_map
+        feature_map_size = int((
+            (len(input_layer[0]) - len(self.filters[0][0]) ) / self.stride_size) + 1)
+        feature_map = self.forward_propagation(int(feature_map_size),input_layer,self.filters)
+        return feature_map
 
     def resize_matrix(self, layer_matrix):
         layer = []
@@ -99,7 +96,7 @@ def relu(input):
 # mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
 # relu(mat)
 # print(mat)
-# # convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
 # matrix_img = cv2.imread('cats/cat.0.jpg')
 # input_layer = list()
 # input_layer.append(convo.get_red_matrix(matrix_img))
