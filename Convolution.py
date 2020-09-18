@@ -81,21 +81,7 @@ class Convolution:
                 result = result + input[i][j]*filter[i][j]
         return result + self.bias
 
-    def relu(self, input):
-        for i in range(len(input)):
-            for j in range(len(input[0])):
-                if input[i][j] < 0:
-                   input[i][j] = 0
-
-def relu(input):
-    for i in range(len(input)):
-        for j in range(len(input[0])):
-            if input[i][j] < 0:
-                input[i][j] = 0  
     
-# mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
-# relu(mat)
-# print(mat)
 # convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
 # matrix_img = cv2.imread('cats/cat.0.jpg')
 # input_layer = list()
