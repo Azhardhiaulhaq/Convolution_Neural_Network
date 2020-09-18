@@ -108,28 +108,46 @@ class Pooling:
         self.mode = mode
     
     def count_feature_map_size(self, input):
-        return (len(input) / self.stride_size) + 1
+        return ((len(input) - self.filter_size) / self.stride_size) + 1
     
-    def pooling_mat(self, input, feature_map_size):
-        feature_map = np.zeros((feature_map_size,feature_map_size),dtype=np.uint8)
-        # TODO Implement pooling
+    def get_func_mode(self):
+        if self.mode == "mean":
+            return lambda input: np.mean(input)
+        elif self.mode == "max":
+            return lambda input: np.max(input)
+
+    def get_sub_mat(self, input, i, j):
+        list_row = [self.stride_size*i + n for n in range(self.filter_size)]
+        list_col = [self.stride_size*j + n for n in range(self.filter_size)]
+        ixgrid = np.ix_(list_row,list_col)
+        return input[ixgrid]
+
+    def pooling_mat(self, input, feature_map_size, func_mode):
+        feature_map = np.zeros((feature_map_size,feature_map_size))
+        for i in range (feature_map_size):
+            for j in range (feature_map_size):
+                feature_map[i][j] = func_mode(self.get_sub_mat(input,i,j))
         return feature_map
 
     def pooling(self, input_layer):
         feature_maps = []
         feature_map_size = self.count_feature_map_size(input_layer[0])
+        func_mode = self.get_func_mode()
         if not feature_map_size.is_integer():
             return None
+        else:
+            feature_map_size = int(feature_map_size)
         for layer in input_layer:
             feature_maps.append(self.pooling_mat(
                 layer, 
-                feature_map_size))
+                feature_map_size,
+                func_mode))
         return feature_maps
     
-mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
-relu(mat)
-print(mat)
-# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+# mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
+# relu(mat)
+# print(mat)
+# # convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
 # matrix_img = cv2.imread('cats/cat.0.jpg')
 # input_layer = list()
 # input_layer.append(convo.get_red_matrix(matrix_img))
@@ -148,7 +166,13 @@ print(mat)
 # img = Image.open('cats/cat.0.jpg')
 # matrix_img = np.array(img)
 
+# pool = Pooling(filter_size=5, stride_size=1, mode="max")
+# func_mode = pool.get_func_mode()
 
 
-
-
+# mat = np.arange(25).reshape(5, 5)
+# # print(pool.count_feature_map_size(mat))
+# print(mat)
+# # print(pool.get_sub_mat(mat, 0, 0))
+# # print(func_mode(pool.get_sub_mat(mat, 0,0)))
+# print(pool.pooling([mat]))
