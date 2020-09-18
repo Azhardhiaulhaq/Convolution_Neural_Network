@@ -35,7 +35,7 @@ class Convolution:
 
     def convolution(self, input_layer):
 
-        self.filters = np.random.choice([-1,0,1],size = (self.num_filter,len(input_layer),self.filter_size,self.filter_size))
+        self.filters = np.random.uniform(-1,1,size = (self.num_filter,len(input_layer),self.filter_size,self.filter_size))
         input_layer = self.resize_matrix(input_layer)
         feature_map_size = int((
             (len(input_layer[0]) - len(self.filters[0][0]) ) / self.stride_size) + 1)
@@ -82,17 +82,17 @@ class Convolution:
         return result + self.bias
 
     
-# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
-# matrix_img = cv2.imread('cats/cat.0.jpg')
-# input_layer = list()
-# input_layer.append(convo.get_red_matrix(matrix_img))
-# input_layer.append(convo.get_green_matrix(matrix_img))
-# input_layer.append(convo.get_blue_matrix(matrix_img))
-# feature_map = convo.convolution(input_layer)
-# print(":::")
-# print(feature_map)
-# img = Image.fromarray(feature_map[0])
-# img.show()
+convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+matrix_img = cv2.imread('cats/cat.0.jpg')
+input_layer = list()
+input_layer.append(convo.get_red_matrix(matrix_img))
+input_layer.append(convo.get_green_matrix(matrix_img))
+input_layer.append(convo.get_blue_matrix(matrix_img))
+feature_map = convo.convolution(input_layer)
+print(":::")
+print(feature_map)
+img = Image.fromarray(feature_map[0])
+img.show()
 
 # img = cv2.imread('cats/cat.0.jpg')
 # print(image)
