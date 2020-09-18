@@ -38,7 +38,7 @@ class Pooling:
         feature_map_size = self.count_feature_map_size(input_layer[0])
         func_mode = self.get_func_mode()
         if not feature_map_size.is_integer():
-            return None
+            raise Exception("Output Feature size is not an Integer")
         else:
             feature_map_size = int(feature_map_size)
         for layer in input_layer:
