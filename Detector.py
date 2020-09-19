@@ -1,4 +1,6 @@
-class Detector :
+from Layer import Layer
+
+class Detector(Layer) :
     def __init__(self):
         super().__init__()
 
@@ -8,6 +10,9 @@ class Detector :
                 if input[i][j] < 0:
                     input[i][j] = 0  
         return input
+    
+    def call(self,input):
+        return self.relu(input)
 
 # mat = [[1,1,-1],[2,-2,2],[-3,3,3]]
 # detect = Detector()

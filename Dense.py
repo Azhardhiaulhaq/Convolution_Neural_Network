@@ -1,8 +1,9 @@
 import random 
 import numpy as np
-from Convolutional import Convolution
+from Convolution import Convolution
+from Layer import Layer
 
-class Dense :
+class Dense(Layer) :
     def __init__(self,num_unit,activation):
         super().__init__()
         self.num_unit = num_unit
@@ -36,18 +37,21 @@ class Dense :
         for i in range(len(weight_array)):
             result = result + weight_array[i] * input_array[i]
         return result
+    
+    def call(self, input):
+        return self.propagate(input)
 
-arr = [1,-2,3,-4,5]
-result = list()
-dens = Dense(4,"relu")
-dens2 = Dense(5,"sigmoid")
-convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
-result.append(dens)
-result.append(dens2)
-result.append(convo)
-for instance in result : 
-    if isinstance(instance,Dense):
-        print("Instance of Dense")
-    else : 
-        print("Not Instance of Dense")
-dens.propagate(arr)
+# arr = [1,-2,3,-4,5]
+# result = list()
+# dens = Dense(4,"relu")
+# dens2 = Dense(5,"sigmoid")
+# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+# result.append(dens)
+# result.append(dens2)
+# result.append(convo)
+# for instance in result : 
+#     if isinstance(instance,Dense):
+#         print("Instance of Dense")
+#     else : 
+#         print("Not Instance of Dense")
+# dens.propagate(arr)

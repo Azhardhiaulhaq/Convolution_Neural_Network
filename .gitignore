@@ -1,2 +1,4 @@
 *.jpg
 .vs*/
+test.py
+__pycache__/*

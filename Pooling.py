@@ -1,6 +1,8 @@
 import numpy as np
+import math
+from Layer import Layer
 
-class Pooling:
+class Pooling(Layer):
     def __init__(self, 
     filter_size, 
     stride_size,
@@ -33,12 +35,12 @@ class Pooling:
                 feature_map[i][j] = func_mode(self.get_sub_mat(input,i,j))
         return feature_map
 
-    def pooling(self, input_layer):
+    def pooling_opt(self, input_layer):
         feature_maps = []
         feature_map_size = self.count_feature_map_size(input_layer[0])
         func_mode = self.get_func_mode()
         if not feature_map_size.is_integer():
-            raise Exception("Output Feature size is not an Integer")
+            feature_map_size = int(math.floor(feature_map_size))
         else:
             feature_map_size = int(feature_map_size)
         for layer in input_layer:
@@ -47,8 +49,12 @@ class Pooling:
                 feature_map_size,
                 func_mode))
         return feature_maps
+    
+    def call(self, input):
+        return self.pooling_opt(input)
 
-# pool = Pooling(filter_size=5, stride_size=1, mode="max")
+# layer = Layer()
+# pool = Pooling(filter_size=3, stride_size=1, mode="max")
 # func_mode = pool.get_func_mode()
 
 
@@ -58,3 +64,4 @@ class Pooling:
 # # print(pool.get_sub_mat(mat, 0, 0))
 # # print(func_mode(pool.get_sub_mat(mat, 0,0)))
 # print(pool.pooling([mat]))
+# print(pool([mat]))

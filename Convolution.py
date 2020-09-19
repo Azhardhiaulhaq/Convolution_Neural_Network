@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
 import cv2
+from Layer import Layer
 
 
-class Convolution:
+class Convolution(Layer):
     def __init__(self, 
     input_size, 
     filter_size,
@@ -80,19 +81,21 @@ class Convolution:
             for j in range(len(input[0])):
                 result = result + input[i][j]*filter[i][j]
         return result + self.bias
-
     
-convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
-matrix_img = cv2.imread('cats/cat.0.jpg')
-input_layer = list()
-input_layer.append(convo.get_red_matrix(matrix_img))
-input_layer.append(convo.get_green_matrix(matrix_img))
-input_layer.append(convo.get_blue_matrix(matrix_img))
-feature_map = convo.convolution(input_layer)
-print(":::")
-print(feature_map)
-img = Image.fromarray(feature_map[0])
-img.show()
+    def call(self, input):
+        return self.convolution(input)
+    
+# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+# matrix_img = cv2.imread('cats/cat.0.jpg')
+# input_layer = list()
+# input_layer.append(convo.get_red_matrix(matrix_img))
+# input_layer.append(convo.get_green_matrix(matrix_img))
+# input_layer.append(convo.get_blue_matrix(matrix_img))
+# feature_map = convo.convolution(input_layer)
+# print(":::")
+# print(feature_map)
+# img = Image.fromarray(feature_map[0])
+# img.show()
 
 # img = cv2.imread('cats/cat.0.jpg')
 # print(image)
