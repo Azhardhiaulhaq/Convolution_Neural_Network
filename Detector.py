@@ -5,10 +5,10 @@ class Detector(Layer) :
         super().__init__()
 
     def relu(self,input):
-        for i in range(len(input)):
-            for j in range(len(input[0])):
-                if input[i][j] < 0:
-                    input[i][j] = 0  
+        for i in range(len(input[0])):
+            for j in range(len(input[0][0])):
+                if input[0][i][j] < 0:
+                    input[0][i][j] = 0  
         return input
     
     def call(self,input):

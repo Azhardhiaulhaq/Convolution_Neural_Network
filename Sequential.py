@@ -28,7 +28,6 @@ class Sequential:
     def forward_prop(self, input_data):
         for layer in self.layers:
             output = layer(input_data)
-            print(output)
             input_data = output
         return output
 
@@ -49,8 +48,8 @@ import numpy as np
 
 s = Sequential()
 
-# s.add(Pooling(filter_size=2, stride_size=1, mode="max"))
-# s.add(Pooling(filter_size=2, stride_size=2, mode="max"))
+# # s.add(Flatten())
+# s.add(Pooling(filter_size=(3,2), stride_size=2, mode="max"))
 
 s.add(Convolution(num_filter =  1,padding_size= 0,stride_size= 1, input_size = (10,10,3),filter_size = (4,3)))
 s.add(Convolution(num_filter =  1,padding_size= 0,stride_size= 1,filter_size = (5,5)))
