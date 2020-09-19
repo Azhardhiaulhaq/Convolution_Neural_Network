@@ -27,7 +27,6 @@ class Sequential:
     def forward_prop(self, input_data):
         for layer in self.layers:
             output = layer(input_data)
-            print(output)
             input_data = output
         return output
 
@@ -42,12 +41,13 @@ class Sequential:
 # from Convolution import Convolution
 # from Pooling import Pooling
 # from Detector import Detector
+# from Flatten import Flatten
 # import numpy as np
 
 # s = Sequential()
 
-# s.add(Pooling(filter_size=2, stride_size=1, mode="max"))
-# s.add(Pooling(filter_size=2, stride_size=2, mode="max"))
+# # s.add(Flatten())
+# s.add(Pooling(filter_size=(3,2), stride_size=2, mode="max"))
 
 # mat = np.arange(25).reshape(5, 5)
 # print(mat)

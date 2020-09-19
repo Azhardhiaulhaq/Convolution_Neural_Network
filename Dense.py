@@ -2,6 +2,7 @@ import random
 import numpy as np
 from Convolution import Convolution
 from Layer import Layer
+from Flatten import Flatten
 
 class Dense(Layer) :
     def __init__(self,num_unit,activation):
@@ -10,11 +11,12 @@ class Dense(Layer) :
         self.activation = activation
         self.bias = 1
 
-    def propagate(self,input_array) : 
+    def propagate(self, input_matrix) :
+        f = Flatten()
+        input_array = f.flattening(input_matrix) 
         result = list()
         input_array.append(self.bias)
         weights = np.random.rand(self.num_unit,len(input_array))
-        print(weights)
         for i in range(len(weights)) : 
             output = self.dot_product(weights[i],input_array)
             if(self.activation == "relu") : 
@@ -22,8 +24,7 @@ class Dense(Layer) :
             elif (self.activation == "sigmoid") :
                 output = self.sigmoid(output)
             result.append(output)
-        
-        print(result)
+
         return result
     
     def relu(self,num):
@@ -43,15 +44,6 @@ class Dense(Layer) :
 
 # arr = [1,-2,3,-4,5]
 # result = list()
-# dens = Dense(4,"relu")
-# dens2 = Dense(5,"sigmoid")
-# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
-# result.append(dens)
-# result.append(dens2)
-# result.append(convo)
-# for instance in result : 
-#     if isinstance(instance,Dense):
-#         print("Instance of Dense")
-#     else : 
-#         print("Not Instance of Dense")
-# dens.propagate(arr)
+# dens = Dense(2,"relu")
+# dens2 = Dense(1,"sigmoid")
+# print(dens2.propagate(arr))

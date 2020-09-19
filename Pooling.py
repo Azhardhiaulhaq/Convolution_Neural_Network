@@ -60,14 +60,14 @@ class Pooling(Layer):
         return self.pooling(input)
 
 # layer = Layer()
-pool = Pooling(filter_size=(3,2), stride_size=2, mode="tes")
+# pool = Pooling(filter_size=(3,2), stride_size=2, mode="max")
 # func_mode = pool.get_func_mode()
 
 
-mat = np.arange(20).reshape(5, 4)
+# mat = np.arange(20).reshape(5, 4)
 # # print(pool.count_feature_map_size(mat))
-print(mat)
+# print(mat)
 # # print(pool.get_sub_mat(mat, 0, 0))
 # # print(func_mode(pool.get_sub_mat(mat, 0,0)))
-print(pool.call([mat]))
+# print(pool.call([mat]))
 # print(pool([mat]))

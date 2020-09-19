@@ -48,8 +48,6 @@ class Convolution(Layer):
         for matrix in layer_matrix:
             layer.append(self.add_padding(
                 cv2.resize(matrix,dsize=(self.input_size, self.input_size),interpolation=cv2.INTER_CUBIC)))
-
-
         return layer
 
     def add_padding(self, matrix):
@@ -71,7 +69,7 @@ class Convolution(Layer):
                     initial_row = j + self.stride_size - 1
                     initial_column = k + self.stride_size - 1
                     kernel_feature_map[i][j][k] = self.dot_product(input_layer[i][initial_row:initial_row+len(filter[i]),initial_column:initial_column+len(filter[i])],filter[i])
-        for kernel_map in kernel_feature_map : 
+        for kernel_map in kernel_feature_map :
             feature_map = feature_map + kernel_map
         return feature_map
                     
@@ -85,7 +83,7 @@ class Convolution(Layer):
     def call(self, input):
         return self.convolution(input)
     
-# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 0,stride_size= 1)
+# convo = Convolution(input_size = 350, filter_size = 3,num_filter =  1,padding_size= 1,stride_size= 1)
 # matrix_img = cv2.imread('cats/cat.0.jpg')
 # input_layer = list()
 # input_layer.append(convo.get_red_matrix(matrix_img))
