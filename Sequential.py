@@ -31,6 +31,14 @@ class Sequential:
             input_data = output
         return output
 
+    # TODO 
+    def backward_prop(self):
+        pass
+
+    # TODO
+    def fit(self):
+        pass
+
 # from Convolution import Convolution
 # from Pooling import Pooling
 # from Detector import Detector
