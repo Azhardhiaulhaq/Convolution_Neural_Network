@@ -25,6 +25,8 @@ class Pooling(Layer):
             return lambda input: np.mean(input)
         elif self.mode == "max":
             return lambda input: np.max(input)
+        else:
+            raise ValueError("Method {} unsupported".format(self.mode))
 
     def get_sub_mat(self, input, i, j):
         filter_size_row, filter_size_col = self.filter_size
@@ -58,11 +60,11 @@ class Pooling(Layer):
         return self.pooling(input)
 
 # layer = Layer()
-pool = Pooling(filter_size=(3,2), stride_size=2, mode="max")
+pool = Pooling(filter_size=(3,2), stride_size=2, mode="tes")
 # func_mode = pool.get_func_mode()
 
 
-mat = np.arange(20).reshape(4, 5)
+mat = np.arange(20).reshape(5, 4)
 # # print(pool.count_feature_map_size(mat))
 print(mat)
 # # print(pool.get_sub_mat(mat, 0, 0))
