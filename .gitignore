@@ -2,3 +2,6 @@
 .vs*/
 test.py
 __pycache__/*
+
+# Dummy Data
+data/*
