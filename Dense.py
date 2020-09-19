@@ -4,7 +4,7 @@ from Convolution import Convolution
 from Layer import Layer
 
 class Dense(Layer) :
-    def __init__(self,num_unit,activation):
+    def __init__(self,num_unit,activation="relu"):
         super().__init__()
         self.num_unit = num_unit
         self.activation = activation
@@ -14,7 +14,6 @@ class Dense(Layer) :
         result = list()
         input_array.append(self.bias)
         weights = np.random.rand(self.num_unit,len(input_array))
-        print(weights)
         for i in range(len(weights)) : 
             output = self.dot_product(weights[i],input_array)
             if(self.activation == "relu") : 
@@ -23,7 +22,6 @@ class Dense(Layer) :
                 output = self.sigmoid(output)
             result.append(output)
         
-        print(result)
         return result
     
     def relu(self,num):

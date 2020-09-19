@@ -14,7 +14,10 @@ class Flatten(Layer) :
         return self.flattening(input)
 
 
-# matrix = [[[1,2,3],[2,3,4]],[[1,2,1],[5,4,2]]]
+# matrix = [[[31,151,191],
+#   [59,202 ,41],
+#   [37 ,88,155],
+#   [34,222,208]]]
 # flat = Flatten()
 # result = flat.flattening(matrix)
 # print(result)
