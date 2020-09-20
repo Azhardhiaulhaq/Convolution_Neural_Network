@@ -13,22 +13,24 @@ class MyCNN:
             for layer in layers:
                 self.add(layer)
 
+    # add adds new layer into layers list
     def add(self, layer):
         if not isinstance(layer, Layer):
             raise TypeError("Not Layer Type")
         else:
             self.layers.append(layer)
 
+    # pop deletes last layer
     def pop(self):
         if self.layers:
             self.layers.pop()
         else:
             raise ValueError("Empty layers")
-
+    
+    # forward_prop
     def forward_prop(self, input_data):
         for layer in self.layers:
             output = layer(input_data)
-            print(output)
             input_data = output
         return output
 

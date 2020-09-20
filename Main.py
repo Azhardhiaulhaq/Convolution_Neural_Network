@@ -12,7 +12,7 @@ import cv2
 class Main:
     def __init__(self):
         super.__init__()
-
+    # TODO
     def predict(self, output):
         pass
 
