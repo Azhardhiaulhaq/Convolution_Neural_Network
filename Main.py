@@ -27,6 +27,8 @@ class Main:
 
     if __name__ == "__main__":
         list_images = []
+        list_labels = []
+        list_predictions = []
 
         train_ds = tf.keras.preprocessing.image_dataset_from_directory(
             directory='test/',
@@ -37,7 +39,7 @@ class Main:
 
         for images,labels in train_ds.take(1):
             for i in range(len(images)): 
-                print(labels[i].numpy())
+                list_labels.append(labels[i].numpy())
                 list_images.append(images[i].numpy())
 
         model = MyCNN()
@@ -51,7 +53,14 @@ class Main:
         model.add(Dense(128,"relu"))
         model.add(Dense(64,"relu"))
         model.add(Dense(1,"sigmoid"))
-        print(model.forward_prop(list_images[0]))
+
+        for image in list_images :
+            list_prediction.append(model.forward_prop(image))
+        
+        print('| Predictions    | Labels    |')
+        for i in range(len(list_labels)):
+            print('| ' + str(list_predictions[i] + '\t| ' + str(list_labels[i] + '\t|')))
+            
 
 
 
