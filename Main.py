@@ -1,7 +1,10 @@
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
 from Convolution import Convolution
 from Pooling import Pooling
-from Detector import Detector
-from Sequential import Sequential
+from Flatten import Flatten
+from MyCNN import MyCNN
 from Dense import Dense
 import cv2
 
@@ -12,20 +15,40 @@ class Main:
     def predict(self, output):
         pass
 
-s = Sequential()
-convolution = Convolution(input_size=(350,350,3), filter_size=(3,3), num_filter= 1, padding_size=1, stride_size=1)
-detector = Detector()
-pooling = Pooling(filter_size=(2,2), stride_size=1, mode="max")
-dense = Dense(num_unit=1, activation="sigmoid")
-s.add(convolution)
-s.add(detector)
-s.add(pooling)
-s.add(dense)
+    def get_red_matrix(self, image):
+        return image[:,:,2]
 
-matrix_img = cv2.imread('dogs/dog.0.jpg')
-input_layer = list()
-input_layer.append(convolution.get_red_matrix(matrix_img))
-input_layer.append(convolution.get_green_matrix(matrix_img))
-input_layer.append(convolution.get_blue_matrix(matrix_img))
+    def get_green_matrix(self, image):
+        return image[:,:,1]
 
-print(s.forward_prop(input_layer))
+    def get_blue_matrix(self, image):
+        return image[:,:,0]
+
+    if __name__ == "__main__":
+        list_images = []
+
+        train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+            directory='test/',
+            labels='inferred',
+            label_mode='int',
+            batch_size=40,
+            image_size=(300,300))
+
+        for images,labels in train_ds.take(1):
+            for i in range(len(images)): 
+                print(labels[i].numpy())
+                list_images.append(images[i].numpy())
+
+        model = MyCNN()
+        model.add(Convolution(num_filter =  16, input_size = (150,150,3),filter_size = (3,3)))
+        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        model.add(Convolution(num_filter =  32,filter_size = (3,3)))
+        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        model.add(Flatten())
+        model.add(Dense(128,"relu"))
+        model.add(Dense(64,"relu"))
+        model.add(Dense(1,"sigmoid"))
+        print(model.forward_prop(list_images[0]))
+
+
+
