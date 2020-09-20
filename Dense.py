@@ -11,9 +11,7 @@ class Dense(Layer) :
         self.activation = activation
         self.bias = 1
 
-    def propagate(self, input_matrix) :
-        f = Flatten()
-        input_array = f.flattening(input_matrix) 
+    def propagate(self, input_array) :
         result = list()
         input_array.append(self.bias)
         weights = np.random.rand(self.num_unit,len(input_array))
