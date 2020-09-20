@@ -1,4 +1,5 @@
 from Layer import Layer
+
 class Detector(Layer) :
     def __init__(self,activation="relu"):
         super().__init__()
