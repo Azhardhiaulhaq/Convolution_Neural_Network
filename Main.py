@@ -55,7 +55,7 @@ class Main:
         model.add(Dense(1,"sigmoid"))
 
         for image in list_images :
-            list_prediction.append(model.forward_prop(image))
+            list_predictions.append(model.forward_prop(image))
         
         print('| Predictions    | Labels    |')
         for i in range(len(list_labels)):
