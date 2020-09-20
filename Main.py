@@ -24,11 +24,13 @@ class Main:
 
     def get_blue_matrix(self, image):
         return image[:,:,0]
+    
 
     if __name__ == "__main__":
         list_images = []
         list_labels = []
         list_predictions = []
+        treshold = 0.5
 
         train_ds = tf.keras.preprocessing.image_dataset_from_directory(
             directory='test/',
@@ -40,26 +42,32 @@ class Main:
         for images,labels in train_ds.take(1):
             for i in range(len(images)): 
                 list_labels.append(labels[i].numpy())
-                list_images.append(images[i].numpy())
+                list_images.append(images[i].numpy()*1/255)
+
 
         model = MyCNN()
-        model.add(Convolution(num_filter =  16, input_size = (150,150,3),filter_size = (3,3)))
+        model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
         model.add(Detector())
         model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        model.add(Convolution(num_filter =  32,filter_size = (3,3)))
+        model.add(Convolution(num_filter =  8,filter_size = (3,3)))
         model.add(Detector())
         model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
         model.add(Flatten())
-        model.add(Dense(128,"relu"))
-        model.add(Dense(64,"relu"))
+        model.add(Dense(256,"relu"))
         model.add(Dense(1,"sigmoid"))
 
-        for image in list_images :
-            list_predictions.append(model.forward_prop(image))
+        for i in range(len(list_images)) :
+            print('Iterasi ke - ' + str(i+1))
+            predict = model.forward_prop(list_images[i])
+            if (predict[0] > treshold):
+                list_predictions.append(1)
+            else :
+                list_predictions.append(0)
+            
         
         print('| Predictions    | Labels    |')
         for i in range(len(list_labels)):
-            print('| ' + str(list_predictions[i] + '\t| ' + str(list_labels[i] + '\t|')))
+            print('| ' + str(list_predictions[i]) + '\t| ' + str(list_labels[i]) + '\t|')
             
 
 

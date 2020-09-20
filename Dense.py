@@ -14,7 +14,7 @@ class Dense(Layer) :
     def propagate(self, input_array) :
         result = list()
         input_array.append(self.bias)
-        weights = np.random.rand(self.num_unit,len(input_array))
+        weights = np.random.uniform(-1,1,size=(self.num_unit,len(input_array)))
         for i in range(len(weights)) : 
             output = self.dot_product(weights[i],input_array)
             if(self.activation == "relu") : 
