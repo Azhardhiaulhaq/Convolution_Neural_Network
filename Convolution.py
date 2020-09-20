@@ -83,22 +83,3 @@ class Convolution(Layer):
             self.input_size = (len(input[0][0]),len(input[0]),len(input))
         return self.convolution(input)
     
-# convo = Convolution(num_filter =  1,padding_size= 0,stride_size= 1, input_size = (350,350,3),filter_size = (4,3))
-# matrix_img = cv2.imread('cats/cat.0.jpg')
-# input_layer = list()
-# input_layer.append(convo.get_red_matrix(matrix_img))
-# input_layer.append(convo.get_green_matrix(matrix_img))
-# input_layer.append(convo.get_blue_matrix(matrix_img))
-# feature_map = convo.convolution(input_layer)
-# print(":::")
-# print(feature_map)
-# img = Image.fromarray(feature_map[0])
-# img.show()
-
-# img = cv2.imread('cats/cat.0.jpg')
-# print(image)
-# cv2.imshow("Image",image)
-# cv2.waitKey()
-# img = Image.open('cats/cat.0.jpg')
-# matrix_img = np.array(img)
-

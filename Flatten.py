@@ -13,11 +13,3 @@ class Flatten(Layer) :
     def call(self, input):
         return self.flattening(input)
 
-
-# matrix = [[[31,151,191],
-#   [59,202 ,41],
-#   [37 ,88,155],
-#   [34,222,208]]]
-# flat = Flatten()
-# result = flat.flattening(matrix)
-# print(result)
