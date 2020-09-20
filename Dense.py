@@ -39,9 +39,3 @@ class Dense(Layer) :
     
     def call(self, input):
         return self.propagate(input)
-
-# arr = [1,-2,3,-4,5]
-# result = list()
-# dens = Dense(2,"relu")
-# dens2 = Dense(1,"sigmoid")
-# print(dens2.propagate(arr))
