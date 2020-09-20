@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from Convolution import Convolution
+from Detector import Detector
 from Pooling import Pooling
 from Flatten import Flatten
 from MyCNN import MyCNN
@@ -41,8 +42,10 @@ class Main:
 
         model = MyCNN()
         model.add(Convolution(num_filter =  16, input_size = (150,150,3),filter_size = (3,3)))
+        model.add(Detector())
         model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
         model.add(Convolution(num_filter =  32,filter_size = (3,3)))
+        model.add(Detector())
         model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
         model.add(Flatten())
         model.add(Dense(128,"relu"))

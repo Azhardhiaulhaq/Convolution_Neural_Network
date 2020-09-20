@@ -15,8 +15,7 @@ class Convolution(Layer):
     padding_size=0, 
     stride_size=1,
     input_size = (), 
-    filter_size = (),
-    activation="relu"):
+    filter_size = ()):
 
         super().__init__()
         self.num_filter = num_filter
@@ -26,7 +25,6 @@ class Convolution(Layer):
         self.stride_size = stride_size
         self.bias = 0
         self.filters = []
-        self.activation = activation
         if (input_size):
             self.filters = np.random.uniform(-1,1,size = (self.num_filter,self.input_size[2],self.filter_size[0],self.filter_size[1]))
         
@@ -56,8 +54,7 @@ class Convolution(Layer):
     def forward_propagation(self,input_layer,filters,feature_map_size = ()) :
         feature_map = np.zeros((len(filters),feature_map_size[0],feature_map_size[1]),dtype=np.uint8)
         for i in range(len(filters)):
-            if(self.activation == "relu"):
-                feature_map[i] = self.relu(self.count_feature_map(input_layer,filters[i],feature_map_size = (feature_map_size[0],feature_map_size[1])))
+            feature_map[i] = self.count_feature_map(input_layer,filters[i],feature_map_size = (feature_map_size[0],feature_map_size[1]))
         return feature_map
         
     def count_feature_map(self,input_layer,filter,feature_map_size=()):
@@ -79,13 +76,6 @@ class Convolution(Layer):
             for j in range(len(input[0])):
                 result = result + input[i][j]*filter[i][j]
         return result + self.bias
-
-    def relu(self,input):
-        for i in range(len(input)):
-            for j in range(len(input[0])):
-                if input[i][j] < 0:
-                    input[i][j] = 0  
-        return input
     
     def call(self, input):
         if(len(self.filters) == 0):
