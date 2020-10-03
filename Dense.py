@@ -44,7 +44,7 @@ class Dense(Layer) :
             self.weights = np.random.uniform(-1,1,size=(self.num_unit,len(self.inputs)))
         return self.propagate(self.inputs)
 
-    def backprop(self,error,target_weight):
+    def back_propagation(self,error,target_weight):
         self.activation_derivative(error)
         delta_weight = list()
         if(target_weight == True):
@@ -83,8 +83,8 @@ class Dense(Layer) :
             result.append(np.dot(error,self.weights[:,i]))
         return result
 
-dense = Dense(10,"relu")
-input = [10,0]
-error = [2,1,0,10,-3,5,10,7,-4,-8]
-output = dense.call(input)
-dense.backprop(error,False)
+# dense = Dense(10,"relu")
+# input = [10,0]
+# error = [2,1,0,10,-3,5,10,7,-4,-8]
+# output = dense.call(input)
+# dense.back_propagation(error,False)

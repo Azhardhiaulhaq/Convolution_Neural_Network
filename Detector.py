@@ -16,3 +16,11 @@ class Detector(Layer) :
     def call(self, input):
         if(self.activation == "relu"):
             return self.relu(input)
+        else:
+            raise ValueError("Method {} unsupported".format(self.mode))
+    
+    def back_propagation(self,error):
+        for i in range(len(error)):
+            if(error[i] < 0):
+                error[i] = 0
+        return error

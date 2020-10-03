@@ -46,14 +46,15 @@ class Pooling(Layer):
         for i in range (feature_map_size_row):
             for j in range (feature_map_size_col):
                 feature_map[i][j] = func_mode(self.get_sub_mat(input,i,j))
-        
         return feature_map
 
     # pooling returns feature maps after pooling
     def pooling(self, input_layer):
         feature_map_size = self.count_feature_map_size(input_layer[0].shape)
         func_mode = self.get_func_mode()
-        return self.forward_propagation(feature_map_size,input_layer,func_mode)
+        result = self.forward_propagation(feature_map_size,input_layer,func_mode)
+        self.result_pooling = result
+        return result
     
     # forward_propagation counts all feature maps
     def forward_propagation(self, feature_map_size,input_layer,func_mode):
@@ -63,4 +64,25 @@ class Pooling(Layer):
         return feature_maps
     
     def call(self, input):
+        self.input = input
+        self.input_shape = input.shape
         return self.pooling(input)
+
+    def back_propagation(self,error):
+        result = np.zeros(self.input_shape)
+        print(self.input)
+        for i in range(len(error)):
+            for j in range(len(error[0])):
+                for k in range(len(error[0][0])):
+                    position = np.where(self.input == self.result_pooling[i][j][k])
+                    result[position[0][0]][position[1][0]][position[2][0]] = error[i][j][k]
+        return result
+
+
+input = np.asarray([[[0,76,64],[109,0,10],[118,71,67]],[[0,0,66],[0,102,0],[0,0,0]]])
+print(np.where(input == 109))
+pool = Pooling(filter_size=(3,3), stride_size=1, mode="max")
+out = pool.call(input)
+
+result = pool.back_propagation([[[0.079]],[[0.239]]])
+print(result)
