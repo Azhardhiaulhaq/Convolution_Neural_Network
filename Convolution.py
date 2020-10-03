@@ -78,6 +78,7 @@ class Convolution(Layer):
         return result + self.bias
     
     def call(self, input):
+        self.input = input
         if(len(self.filters) == 0):
             self.filters = np.random.uniform(-1,1,size = (self.num_filter,len(input),self.filter_size[0],self.filter_size[1]))
             self.input_size = (len(input[0][0]),len(input[0]),len(input))

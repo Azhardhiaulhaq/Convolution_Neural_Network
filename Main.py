@@ -8,6 +8,8 @@ from Flatten import Flatten
 from MyCNN import MyCNN
 from Dense import Dense
 import cv2
+from PIL import Image
+from keras.preprocessing.image import array_to_img
 
 class Main:
     def __init__(self):
