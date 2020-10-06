@@ -2,11 +2,15 @@ import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
-from layer import Convolution, Detector, Pooling, Flatten, Dense
+from Convolution import Convolution
+from Detector import Detector
+from Pooling import Pooling
+from Flatten import Flatten
 from MyCNN import MyCNN
+from Dense import Dense
 import cv2, os
 from PIL import Image
-from tensorflow.keras.preprocessing.image import array_to_img
+from keras.preprocessing.image import array_to_img
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import KFold
 
