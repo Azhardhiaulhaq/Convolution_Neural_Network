@@ -58,7 +58,7 @@ class Pooling(Layer):
     
     # forward_propagation counts all feature maps
     def forward_propagation(self, feature_map_size,input_layer,func_mode):
-        feature_maps = np.zeros((len(input_layer),feature_map_size[0],feature_map_size[1]),dtype=np.uint8)
+        feature_maps = np.zeros((len(input_layer),feature_map_size[0],feature_map_size[1]))
         for i, layer in enumerate(input_layer):
             feature_maps[i] = self.count_feature_map(layer, feature_map_size,func_mode)
         return feature_maps
@@ -79,10 +79,10 @@ class Pooling(Layer):
         return result
 
 
-input = np.asarray([[[0,76,64],[109,0,10],[118,71,67]],[[0,0,66],[0,102,0],[0,0,0]]])
-print(np.where(input == 109))
-pool = Pooling(filter_size=(3,3), stride_size=1, mode="max")
-out = pool.call(input)
+# input = np.asarray([[[0,76,64],[109,0,10],[118,71,67]],[[0,0,66],[0,102,0],[0,0,0]]])
+# print(np.where(input == 109))
+# pool = Pooling(filter_size=(3,3), stride_size=1, mode="max")
+# out = pool.call(input)
 
-result = pool.back_propagation([[[0.079]],[[0.239]]])
-print(result)
+# result = pool.back_propagation([[[0.079]],[[0.239]]])
+# print(result)

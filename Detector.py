@@ -20,7 +20,5 @@ class Detector(Layer) :
             raise ValueError("Method {} unsupported".format(self.mode))
     
     def back_propagation(self,error):
-        for i in range(len(error)):
-            if(error[i] < 0):
-                error[i] = 0
+        error[error < 0.] = 0.
         return error
