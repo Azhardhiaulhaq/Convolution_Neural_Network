@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from Layer import Layer
+from layer.Layer import Layer
 
 class Pooling(Layer):
     def __init__(self, 

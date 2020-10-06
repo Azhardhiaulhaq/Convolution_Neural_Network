@@ -1,5 +1,5 @@
 import functools
-from Layer import Layer
+from layer import Layer
 import cv2
 
 class MyCNN:
@@ -40,4 +40,12 @@ class MyCNN:
 
     # TODO
     def fit(self):
+        pass
+    
+    # TODO
+    def save(self,filename):
+        pass
+
+    # TODO
+    def load(self, filename):
         pass

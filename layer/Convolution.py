@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
 import cv2
-from Layer import Layer
+from layer.Layer import Layer
 
 
 class Convolution(Layer):

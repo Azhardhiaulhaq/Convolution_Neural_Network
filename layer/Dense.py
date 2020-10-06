@@ -1,8 +1,8 @@
 import random 
 import numpy as np
-from Convolution import Convolution
-from Layer import Layer
-from Flatten import Flatten
+from layer.Convolution import Convolution
+from layer.Layer import Layer
+from layer.Flatten import Flatten
 
 class Dense(Layer) :
     def __init__(self,num_unit,activation="relu"):

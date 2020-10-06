@@ -7,3 +7,6 @@ class Layer:
     
     def call(self, input_data):
         return input_data
+    
+    def back_propagation(self,error):
+        return error

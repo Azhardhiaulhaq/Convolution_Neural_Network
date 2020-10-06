@@ -1,15 +1,11 @@
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-from Convolution import Convolution
-from Detector import Detector
-from Pooling import Pooling
-from Flatten import Flatten
+from layer import Convolution, Detector, Pooling, Flatten, Dense
 from MyCNN import MyCNN
-from Dense import Dense
 import cv2
 from PIL import Image
-from keras.preprocessing.image import array_to_img
+from tensorflow.keras.preprocessing.image import array_to_img
 
 class Main:
     def __init__(self):

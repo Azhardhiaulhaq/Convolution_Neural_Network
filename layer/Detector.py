@@ -1,4 +1,4 @@
-from Layer import Layer
+from layer.Layer import Layer
 
 class Detector(Layer) :
     def __init__(self,activation="relu"):
