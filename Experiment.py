@@ -13,6 +13,9 @@ from PIL import Image
 from keras.preprocessing.image import array_to_img
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import KFold
+from sklearn.naive_bayes import MultinomialNB
+from tensorflow.keras.optimizers import RMSprop
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 class Experiment:
     def __init__(self):
@@ -48,7 +51,7 @@ class Experiment:
             class_dictionary[str(i)] = list_folder_per_class[i]
         
         file_path, class_label, class_dictionary = np.asarray(file_path), np.array(class_label), class_dictionary
-        images = np.array([(cv2.resize(cv2.cvtColor((cv2.imread(img, 1)), cv2.COLOR_BGR2RGB), (300,300))) for img in file_path])
+        images = np.array([(cv2.resize(cv2.cvtColor((cv2.imread(img, 1)), cv2.COLOR_BGR2RGB), (150,150))) for img in file_path])
 
         return images, class_label
     
@@ -73,7 +76,7 @@ class Experiment:
             list_labels.append(label)
 
         model = MyCNN()
-        model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
+        model.add(Convolution(num_filter =  4, input_size = (150,150,3), filter_size = (3,3)))
         model.add(Detector())
         model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
         model.add(Convolution(num_filter =  8,filter_size = (3,3)))
@@ -83,36 +86,58 @@ class Experiment:
         model.add(Dense(256,"relu"))
         model.add(Dense(1,"sigmoid"))
 
+        # MODEL MACHINE LEARNING
+        # model = tf.keras.models.Sequential([
+        #     tf.keras.layers.Conv2D(16, (2,2), activation='relu', input_shape=(150, 150, 3)),
+        #     tf.keras.layers.AveragePooling2D(2,2),
+        #     tf.keras.layers.Conv2D(32, (2,2), activation='relu'),
+        #     tf.keras.layers.AveragePooling2D(2,2), 
+        #     tf.keras.layers.Conv2D(64, (3,3), activation='relu'), 
+        #     tf.keras.layers.AveragePooling2D(2,2),
+        #     tf.keras.layers.Flatten(), 
+        #     tf.keras.layers.Dense(512, activation='relu'), 
+        #     tf.keras.layers.Dense(1, activation='sigmoid')  
+        # ])
+        # model.compile(optimizer=RMSprop(lr=0.0001), loss='binary_crossentropy', metrics = ['accuracy'])
+
         list_images = np.array(list_images)
         list_labels = np.array(list_labels)
 
         # Experiment 1
         # Skema split 90% train data, 10% test data
+        print("DATA SPLIT SCHEMA")
         sss = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=0)
         for train_index, test_index in sss.split(list_images, list_labels):
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
 
+        # model.fit(training_data, training_label, epochs=20, verbose=2) # TRAIN MODEL
+        # pred_label = model.predict_classes(testing_data, batch_size=10) # PREDICT DATA
+        pred_label = []
+        i = 0
+        for data in testing_data:
+            print("data ke-", i)
+            predict = model.forward_prop(data)
+            pred_label.append(predict)
+            i = i + 1
+            
+        accuracy = accuracy_score(testing_label, pred_label)
+        print("Accuracy : ", accuracy)
+
+
         # Experiment 2
         # Skema 10-fold cross validation
-        kf = KFold(n_splits=10)
-        for train_index, test_index in kf.split(list_images):
-            training_data, testing_data = list_images[train_index], list_images[test_index]
-            training_label, testing_label = list_labels[train_index], list_labels[test_index]
-            
-        # for i in range(len(list_images)) :
-        #     print('Iterasi ke - ' + str(i+1))
-        #     predict = model.forward_prop(list_images[i])
-        #     if (predict[0] > treshold):
-        #         list_predictions.append(1)
-        #     else :
-        #         list_predictions.append(0)
-            
-        
-        # print('| Predictions    | Labels    |')
-        # for i in range(len(list_labels)):
-        #     print('| ' + str(list_predictions[i]) + '\t| ' + str(list_labels[i]) + '\t|')
-            
+        # print("10-FOLD CROSS VALIDATION SCHEMA")
+        # kf = KFold(n_splits=10)
+        # for train_index, test_index in kf.split(list_images):
+        #     training_data, testing_data = list_images[train_index], list_images[test_index]
+        #     training_label, testing_label = list_labels[train_index], list_labels[test_index]
+           
+        #     model.fit(training_data, training_label, epochs=5, verbose=2) # TRAIN MODEL
+        #     pred_label = model.predict_classes(testing_data, batch_size=10) # PREDICT DATA
+
+        #     accuracy = accuracy_score(testing_label, pred_label)
+        #     print("Accuracy : ", accuracy)
 
 
 
