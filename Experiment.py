@@ -87,18 +87,18 @@ class Experiment:
         model.add(Dense(1,"sigmoid"))
 
         # MODEL MACHINE LEARNING
-        # model = tf.keras.models.Sequential([
-        #     tf.keras.layers.Conv2D(16, (2,2), activation='relu', input_shape=(150, 150, 3)),
-        #     tf.keras.layers.AveragePooling2D(2,2),
-        #     tf.keras.layers.Conv2D(32, (2,2), activation='relu'),
-        #     tf.keras.layers.AveragePooling2D(2,2), 
-        #     tf.keras.layers.Conv2D(64, (3,3), activation='relu'), 
-        #     tf.keras.layers.AveragePooling2D(2,2),
-        #     tf.keras.layers.Flatten(), 
-        #     tf.keras.layers.Dense(512, activation='relu'), 
-        #     tf.keras.layers.Dense(1, activation='sigmoid')  
-        # ])
-        # model.compile(optimizer=RMSprop(lr=0.0001), loss='binary_crossentropy', metrics = ['accuracy'])
+        model = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(16, (2,2), activation='relu', input_shape=(150, 150, 3)),
+            tf.keras.layers.AveragePooling2D(2,2),
+            tf.keras.layers.Conv2D(32, (2,2), activation='relu'),
+            tf.keras.layers.AveragePooling2D(2,2), 
+            tf.keras.layers.Conv2D(64, (3,3), activation='relu'), 
+            tf.keras.layers.AveragePooling2D(2,2),
+            tf.keras.layers.Flatten(), 
+            tf.keras.layers.Dense(512, activation='relu'), 
+            tf.keras.layers.Dense(1, activation='sigmoid')  
+        ])
+        model.compile(optimizer=RMSprop(lr=0.0001), loss='binary_crossentropy', metrics = ['accuracy'])
 
         list_images = np.array(list_images)
         list_labels = np.array(list_labels)
@@ -111,19 +111,24 @@ class Experiment:
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
 
-        # model.fit(training_data, training_label, epochs=20, verbose=2) # TRAIN MODEL
-        # pred_label = model.predict_classes(testing_data, batch_size=10) # PREDICT DATA
-        pred_label = []
-        i = 0
-        for data in testing_data:
-            print("data ke-", i)
-            predict = model.forward_prop(data)
-            pred_label.append(predict)
-            i = i + 1
+        model.fit(training_data, training_label, epochs=10, verbose=2) # TRAIN MODEL
+        pred_label = model.predict_classes(testing_data, batch_size=10) # PREDICT DATA
+        # pred_label = []
+        # i = 0
+        # for data in testing_data:
+        #     print("data ke-", i)
+        #     predict = model.forward_prop(data)
+        #     pred_label.append(predict)
+        #     i = i + 1
             
         accuracy = accuracy_score(testing_label, pred_label)
         print("Accuracy : ", accuracy)
 
+        print("Confussion Matrix : ")
+        tn, fp, fn, tp = confusion_matrix(testing_label, pred_label).ravel()
+        print("    | 1 | 0 |")
+        print("| 1 |",tp,"|",fp)
+        print("| 0 |",fn,"|",tn)
 
         # Experiment 2
         # Skema 10-fold cross validation
