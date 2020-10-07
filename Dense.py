@@ -48,7 +48,7 @@ class Dense(Layer) :
         self.activation_derivative(error)
         delta_weight = list()
         if(target_weight == True):
-            delta_weigth = self.input_derivative(error)
+            delta_weight = self.input_derivative(error)
         elif (target_weight == False): 
             delta_weight = self.weights_derivative(error)
         return delta_weight
@@ -88,3 +88,17 @@ class Dense(Layer) :
 # error = [2,1,0,10,-3,5,10,7,-4,-8]
 # output = dense.call(input)
 # dense.back_propagation(error,False)
+
+# import jsonpickle
+# import json
+# # import jsonpickle.ext.numpy as jsonpickle_numpy
+
+# print(dense.save())
+# # # jsonpickle_numpy.register_handlers()
+# # json_encode = jsonpickle.encode(dense)
+# # print(json_encode)
+# # dense_2 = jsonpickle.decode(json_encode)
+# # # print(dense_2.weights)
+
+# json_encode = json.enc
+# assert(json_encode[])
