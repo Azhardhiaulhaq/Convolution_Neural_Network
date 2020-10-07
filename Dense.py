@@ -23,7 +23,6 @@ class Dense(Layer) :
             elif (self.activation == "sigmoid") :
                 output = self.sigmoid(output)
             result.append(output)
-        
         return result
     
     def relu(self,num):
@@ -45,12 +44,12 @@ class Dense(Layer) :
             self.weights = np.random.uniform(-1,1,size=(self.num_unit,len(self.inputs)))
         return self.propagate(self.inputs)
 
-    def back_propagation(self,error):
+    def back_propagation(self,error,momentum):
         self.activation_derivative(error)
         if self.delta_weights is None:
             self.delta_weights = self.weights_derivative(error)
         else:
-            self.delta_weights += self.weights_derivative(error)
+            self.delta_weights = self.delta_weights*momentum + self.weights_derivative(error)
         return self.input_derivative(error)
 
     def update(self, learning_rate):
@@ -85,7 +84,7 @@ class Dense(Layer) :
         result = list()
         for i in range(len(self.weights[0])):
             result.append(np.dot(error,self.weights[:,i]))
-        return np.array(result)
+        return np.array(result[:-1])
 
 input = [10,0]
 dense = Dense(10,"relu")
