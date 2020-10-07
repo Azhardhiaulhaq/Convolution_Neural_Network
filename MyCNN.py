@@ -1,6 +1,7 @@
 import functools
 from Layer import Layer
 import cv2
+import jsonpickle
 
 class MyCNN:
     def __init__(self, 
@@ -41,3 +42,13 @@ class MyCNN:
     # TODO
     def fit(self):
         pass
+
+    def save(self, filename):
+        layer_json = jsonpickle.encode(self.layers, indent=1)
+
+        with open(filename, "w") as file_io:
+            print(layer_json, file=file_io)
+    
+    def load(self, filename):
+        file_io = open(filename,"r")
+        self.layers = jsonpickle.decode(file_io.read())
