@@ -93,7 +93,7 @@ dense2 = Dense(1,"sigmoid")
 output2 = dense2.call(output)
 print(output2)
 print('-----------')
-backprop1 = dense2.back_propagation(output2)
+backprop1 = dense2.back_propagation(output2,2)
 print(dense2.__dict__)
 print(backprop1)
 # error = [2,1,0,10,-3,5,10,7,-4,-8]
