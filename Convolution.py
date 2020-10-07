@@ -93,6 +93,7 @@ class Convolution(Layer):
             self.delta_weights = self.weights_derivative(error)
         else:
             self.delta_weights += self.weights_derivative(error)
+
         return self.input_derivative(error)  
 
     def weights_derivative(self, error) :
@@ -108,18 +109,28 @@ class Convolution(Layer):
         self.delta_weights = None
 
     def input_derivative(self,error) : 
+        padded_error = list()
         for i in range(len(error)):
-                error[i] = self.add_padding(error[i],1)
-        filter = [[[[0,1],[-1,0]]],[[[2,3],[4,5]]]]
-        error = self.convolution(error,filter,type='full')
+            padded_error.append(self.add_padding(error[i],1))
+        error = self.convolution(padded_error,self.filters,type='full')
         result = np.zeros((len(error[0]),len(error[0][0])))
         for i in range(len(error)):
             result = result + error[i]
         return np.array(result)
 
-input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]] 
-convo = Convolution(num_filter =  2, input_size = (3,3,2),filter_size = (2,2))
-output = convo.call(input)
+# convo = Convolution(num_filter =  1, input_size = (3,3,2),filter_size = (2,2))
+# convo2 = Convolution(num_filter = 2,filter_size=(2,2))
+# input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]] 
+# output = convo.call(input)
+# output2 = convo2.call(output)
+# print(output2.shape)
+# print(convo2.__dict__)
+# backprop1 = convo2.back_propagation(output2)
+
+
+# print(convo.__dict__)
+# print(backprop1.shape)
+# backprop2 = convo.back_propagation(backprop1)
 # print(output)
 # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 # error = [[[0,0],[-1,0]],[[0,0],[2,0]]]
