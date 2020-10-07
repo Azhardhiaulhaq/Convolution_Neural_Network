@@ -12,6 +12,7 @@ class Dense(Layer) :
         self.bias = 1
         self.weights = None
         self.inputs = None
+        self.delta_weights = None
 
     def propagate(self, input_array) :
         result = list()
@@ -44,14 +45,17 @@ class Dense(Layer) :
             self.weights = np.random.uniform(-1,1,size=(self.num_unit,len(self.inputs)))
         return self.propagate(self.inputs)
 
-    def back_propagation(self,error,target_weight):
+    def back_propagation(self,error):
         self.activation_derivative(error)
-        delta_weight = list()
-        if(target_weight == True):
-            delta_weigth = self.input_derivative(error)
-        elif (target_weight == False): 
-            delta_weight = self.weights_derivative(error)
-        return delta_weight
+        if self.delta_weights is None:
+            self.delta_weights = self.weights_derivative(error)
+        else:
+            self.delta_weights += self.weights_derivative(error)
+        return self.input_derivative(error)
+
+    def update(self, learning_rate):
+        self.weights -= learning_rate*self.delta_weights
+        self.delta_weights = None
 
     def activation_derivative(self, error):
         if(self.activation == "relu"):
@@ -68,23 +72,26 @@ class Dense(Layer) :
         for i in range(len(error)):
             error[i] = error[i]*(1-error[i])
 
-    def input_derivative(self,error):
+    def weights_derivative(self,error):
         result = list()
         for i in range(len(error)):
             weigth = list()
             for j in range(len(self.inputs)):
                 weigth.append(error[i]*self.inputs[j])
             result.append(weigth)
-        return result
+        return np.array(result)
     
-    def weights_derivative(self,error):
+    def input_derivative(self,error):
         result = list()
         for i in range(len(self.weights[0])):
             result.append(np.dot(error,self.weights[:,i]))
-        return result
+        return np.array(result)
 
 # dense = Dense(10,"relu")
 # input = [10,0]
 # error = [2,1,0,10,-3,5,10,7,-4,-8]
 # output = dense.call(input)
-# dense.back_propagation(error,False)
+# dense.back_propagation(error)
+# print(dense.__dict__)
+# dense.update(1)
+# print(dense.__dict__)

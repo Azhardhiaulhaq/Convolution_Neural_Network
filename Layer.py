@@ -7,3 +7,7 @@ class Layer:
     
     def call(self, input_data):
         return input_data
+    
+    # Update pass for non weighted layer
+    def update(self, learning_rate):
+        pass

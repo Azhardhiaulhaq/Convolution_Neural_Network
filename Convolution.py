@@ -29,6 +29,7 @@ class Convolution(Layer):
         self.stride_size = stride_size
         self.bias = 0
         self.filters = []
+        self.delta_weights = None
         if (input_size):
             self.filters = np.random.uniform(-1,1,size = (self.num_filter,self.input_size[2],self.filter_size[0],self.filter_size[1]))
         
@@ -87,22 +88,26 @@ class Convolution(Layer):
         self.input = self.resize_matrix(input)
         return self.convolution(self.input,self.filters)
     
-    def back_propagation(self,error,target_weight):
-        if(target_weight == True):
-            error = self.input_derivative(error)
-        elif (target_weight == False): 
-            error = self.weights_derivative(error)
-        return error 
+    def back_propagation(self,error):
+        if self.delta_weights is None:
+            self.delta_weights = self.weights_derivative(error)
+        else:
+            self.delta_weights += self.weights_derivative(error)
+        return self.input_derivative(error)  
 
-    def input_derivative(self, error) :
+    def weights_derivative(self, error) :
         list_error = list()
         error = np.asarray(error)
         for i in range(len(error)):
             list_error.append(error[i].reshape(1,error[i].shape[0],error[i].shape[1]))
         result = self.convolution(self.input,list_error)
-        return result
+        return np.array(result)
     
-    def weights_derivative(self,error) : 
+    def update(self, learning_rate):
+        self.filters = np.array([[channel- learning_rate*delta_weight for channel in filters] for (filters, delta_weight) in zip(self.filters, self.delta_weights)])
+        self.delta_weights = None
+
+    def input_derivative(self,error) : 
         for i in range(len(error)):
                 error[i] = self.add_padding(error[i],1)
         filter = [[[[0,1],[-1,0]]],[[[2,3],[4,5]]]]
@@ -110,16 +115,19 @@ class Convolution(Layer):
         result = np.zeros((len(error[0]),len(error[0][0])))
         for i in range(len(error)):
             result = result + error[i]
-        return result
+        return np.array(result)
 
-# input = [[[16,24,32],[47,18,26],[68,12,9]]] 
-# convo = Convolution(num_filter =  2, input_size = (3,3,1),filter_size = (2,2))
-# output = convo.call(input)
+input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]] 
+convo = Convolution(num_filter =  2, input_size = (3,3,2),filter_size = (2,2))
+output = convo.call(input)
 # print(output)
 # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-# error = [[[0,0],[-0.000029450,0]],[[0,0],[0.00000639539,0]]]
-# output_error = convo.back_propagation(error,False)
-# print(output_error)   
+# error = [[[0,0],[-1,0]],[[0,0],[2,0]]]
+# convo.back_propagation(error)
+# print(convo.filters[1]) 
+# print(convo.delta_weights[1])
+# convo.update(1)
+# print(convo.filters[1])
 
 
 
