@@ -68,7 +68,7 @@ class Pooling(Layer):
         self.input_shape = input.shape
         return self.pooling(input)
 
-    def back_propagation(self,error):
+    def back_propagation(self,error,momentum):
         result = np.zeros(self.input_shape)
         print(self.input)
         for i in range(len(error)):

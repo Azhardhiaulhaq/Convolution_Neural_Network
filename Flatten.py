@@ -14,7 +14,7 @@ class Flatten(Layer) :
         self.input_shape = input.shape
         return self.flattening(input)
 
-    def back_propagation(self,error):
+    def back_propagation(self,error,momentum):
         list_error = np.asarray(error)
         return list_error.reshape(self.input_shape)
 

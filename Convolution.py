@@ -88,11 +88,11 @@ class Convolution(Layer):
         self.input = self.resize_matrix(input)
         return self.convolution(self.input,self.filters)
     
-    def back_propagation(self,error):
+    def back_propagation(self,error, momentum):
         if self.delta_weights is None:
             self.delta_weights = self.weights_derivative(error)
         else:
-            self.delta_weights += self.weights_derivative(error)
+            self.delta_weights = self.weights_derivative(error) + momentum*self.delta_weights
         return self.input_derivative(error)  
 
     def weights_derivative(self, error) :
