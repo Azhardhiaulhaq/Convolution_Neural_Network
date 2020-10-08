@@ -51,10 +51,9 @@ class Convolution(Layer):
         for i in range(len(filters)):
             if(type == 'valid' or type=='forward'):
                 feature_map[i] = self.count_feature_map(
-                    input_layer, filters[i], feature_map_size=(feature_map_row, feature_map_column), type=type)
+                    input_layer, filters[i], feature_map_size=feature_map.shape[-2:], type=type)
             elif (type == 'full'):
-                feature_map[i] = self.count_feature_map(input_layer[i], filters[i], feature_map_size=(
-                    feature_map_row, feature_map_column), type='full')
+                feature_map[i] = self.count_feature_map(input_layer[i], filters[i], feature_map_size=feature_map.shape[-2:], type='full')
         # print(feature_map.shape)
         return feature_map
 
