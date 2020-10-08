@@ -130,7 +130,7 @@ class Experiment:
         print("| 1 |",tp,"|",fp)
         print("| 0 |",fn,"|",tn)
 
-        # Experiment 2
+        # Experiment 2  
         # Skema 10-fold cross validation
         # print("10-FOLD CROSS VALIDATION SCHEMA")
         # kf = KFold(n_splits=10)
