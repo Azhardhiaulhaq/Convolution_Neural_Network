@@ -89,23 +89,6 @@ class Dense(Layer) :
 # input = [10,0]
 # dense = Dense(10,"relu")
 # output = dense.call(input)
-<<<<<<< HEAD
-# dense.back_propagation(error,False)
-
-# import jsonpickle
-# import json
-# # import jsonpickle.ext.numpy as jsonpickle_numpy
-
-# print(dense.save())
-# # # jsonpickle_numpy.register_handlers()
-# # json_encode = jsonpickle.encode(dense)
-# # print(json_encode)
-# # dense_2 = jsonpickle.decode(json_encode)
-# # # print(dense_2.weights)
-
-# json_encode = json.enc
-# assert(json_encode[])
-=======
 # dense2 = Dense(1,"sigmoid")
 # output2 = dense2.call(output)
 # print(output2)
@@ -119,4 +102,3 @@ class Dense(Layer) :
 # print(dense.__dict__)
 # dense.update(1)
 # print(dense.__dict__)
->>>>>>> 07e0de4306d07234555e8a2311538cb6e3a7c88b
