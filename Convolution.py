@@ -42,12 +42,13 @@ class Convolution(Layer):
         feature_map = np.zeros(
             (len(filters), feature_map_row, feature_map_column))
         for i in range(len(filters)):
-            if(type == 'valid'):
+            if(type == 'valid' or type=='forward'):
                 feature_map[i] = self.count_feature_map(
                     input_layer, filters[i], feature_map_size=(feature_map_row, feature_map_column))
             elif (type == 'full'):
                 feature_map[i] = self.count_feature_map(input_layer[i], filters[i], feature_map_size=(
                     feature_map_row, feature_map_column), type='full')
+        print(feature_map.shape)
         return feature_map
 
     def resize_matrix(self, layer_matrix):
@@ -69,14 +70,15 @@ class Convolution(Layer):
                 for k in range(feature_map_size[1]):
                     initial_row = j + self.stride_size - 1
                     initial_column = k + self.stride_size - 1
-                    if(type == 'valid'):
+                    if(type == 'valid' or type =='forward'):
                         kernel_feature_map[i][j][k] = self.dot_product(input_layer[i][initial_row:initial_row+len(
                             filter[i]), initial_column:initial_column+len(filter[i][0])], filter[i])
                     elif(type == 'full'):
                         kernel_feature_map[i][j][k] = self.dot_product(input_layer[initial_row:initial_row+len(
                             filter[i]), initial_column:initial_column+len(filter[i][0])], filter[i])
-        for kernel_map in kernel_feature_map:
-            feature_map = feature_map + kernel_map
+        if type == 'forward':
+            for kernel_map in kernel_feature_map:
+                feature_map = feature_map + kernel_map
         return feature_map
 
     def dot_product(self, input, filter):
@@ -92,7 +94,7 @@ class Convolution(Layer):
                 self.num_filter, len(input), self.filter_size[0], self.filter_size[1]))
             self.input_size = (len(input[0][0]), len(input[0]), len(input))
         self.input = self.resize_matrix(input)
-        return self.convolution(self.input, self.filters)
+        return self.convolution(self.input, self.filters, type='forward')
 
     def back_propagation(self, error, momentum):
         if self.delta_weights is None:
@@ -126,14 +128,14 @@ class Convolution(Layer):
             result = result + error[i]
         return np.array([result])
 
-# convo = Convolution(num_filter =  1, input_size = (3,3,2),filter_size = (2,2))
+convo = Convolution(num_filter =  1, input_size = (3,3,2),filter_size = (2,2))
 # convo2 = Convolution(num_filter = 2,filter_size=(2,2))
-# input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]]
-# output = convo.call(input)
+input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]]
+output = convo.call(input)
 # output2 = convo2.call(output)
-# # print(output2.shape)
-# # print(convo2.__dict__)
-# backprop1 = convo2.back_propagation(output2,2)
+# print(output2.shape)
+# print(convo2.__dict__)
+backprop1 = convo.back_propagation(output,2)
 
 
 # print(convo.__dict__)
