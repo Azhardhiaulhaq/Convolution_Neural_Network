@@ -72,14 +72,14 @@ class MyCNN:
         
     # fit trains model
     def fit(self, X, y, epoch, learning_rate, momentum, batch_size):
-        X_mini_batches, y_mini_batches = create_mini_batches(X, y, batch_size)
+        X_mini_batches, y_mini_batches = self.create_mini_batches(X, y, batch_size)
         data_batches = list(zip(X_mini_batches, y_mini_batches))
 
         for i in range(epoch):
             for data in data_batches:
                 for data_X, data_y in zip(*data):
                     print("forward prop")
-                    output = self.forward_prop(X[j])
+                    output = self.forward_prop(X[i])
                     print("backward prop")
                     self.backward_prop(output, momentum)
                 self.update(learning_rate)

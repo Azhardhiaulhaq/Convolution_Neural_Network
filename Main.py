@@ -66,7 +66,7 @@ class Main:
         #     else :
         #         list_predictions.append(0)
         #     break
-        model.fit(images[0],labels[0], 1, 0.5, 0.5)
+        model.fit(images[:5],labels[:5], 2, 0.5, 0.5, 2)
                     
         
         # print('| Predictions    | Labels    |')
