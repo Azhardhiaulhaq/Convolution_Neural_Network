@@ -39,16 +39,19 @@ class Convolution(Layer):
             (len(input_layer[0]) - len(filters[0][0])) / self.stride_size) + 1)
         feature_map_column = int((
             (len(input_layer[0][0]) - len(filters[0][0][0])) / self.stride_size) + 1)
-        feature_map = np.zeros(
-            (len(filters), feature_map_row, feature_map_column))
+        if type != 'forward':
+            feature_map = np.zeros(self.filters.shape)
+        else:
+            feature_map = np.zeros(
+                (len(filters), feature_map_row, feature_map_column))
         for i in range(len(filters)):
             if(type == 'valid' or type=='forward'):
                 feature_map[i] = self.count_feature_map(
-                    input_layer, filters[i], feature_map_size=(feature_map_row, feature_map_column))
+                    input_layer, filters[i], feature_map_size=(feature_map_row, feature_map_column), type=type)
             elif (type == 'full'):
                 feature_map[i] = self.count_feature_map(input_layer[i], filters[i], feature_map_size=(
                     feature_map_row, feature_map_column), type='full')
-        print(feature_map.shape)
+        # print(feature_map.shape)
         return feature_map
 
     def resize_matrix(self, layer_matrix):
@@ -79,6 +82,8 @@ class Convolution(Layer):
         if type == 'forward':
             for kernel_map in kernel_feature_map:
                 feature_map = feature_map + kernel_map
+        else:
+            return kernel_feature_map
         return feature_map
 
     def dot_product(self, input, filter):
@@ -114,8 +119,10 @@ class Convolution(Layer):
         return np.array(result)
 
     def update(self, learning_rate):
-        self.filters = np.array([[channel - learning_rate*delta_weight for channel in filters]
-                                 for (filters, delta_weight) in zip(self.filters, self.delta_weights)])
+        assert self.filters.shape == self.delta_weights.shape
+        self.filters -= learning_rate *self.delta_weights
+        # self.filters = np.array([[channel - learning_rate*delta_weight for channel in filters]
+        #                          for (filters, delta_weight) in zip(self.filters, self.delta_weights)])
         self.delta_weights = None
 
     def input_derivative(self, error):
@@ -123,12 +130,14 @@ class Convolution(Layer):
         for i in range(len(error)):
             padded_error.append(self.add_padding(error[i], 1))
         error = self.convolution(padded_error, self.filters, type='full')
-        result = np.zeros((len(error[0]), len(error[0][0])))
-        for i in range(len(error)):
-            result = result + error[i]
-        return np.array([result])
+        result = np.zeros(error.shape[1:])
 
-convo = Convolution(num_filter =  1, input_size = (3,3,2),filter_size = (2,2))
+        for filters in error:
+            result += filters
+
+        return np.array(result)
+
+convo = Convolution(num_filter =  2, input_size = (3,3,2),filter_size = (2,2))
 # convo2 = Convolution(num_filter = 2,filter_size=(2,2))
 input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]]
 output = convo.call(input)
@@ -136,7 +145,7 @@ output = convo.call(input)
 # print(output2.shape)
 # print(convo2.__dict__)
 backprop1 = convo.back_propagation(output,2)
-
+convo.update(1)
 
 # print(convo.__dict__)
 # print(backprop1.shape)
