@@ -124,15 +124,15 @@ class Convolution(Layer):
         result = np.zeros((len(error[0]), len(error[0][0])))
         for i in range(len(error)):
             result = result + error[i]
-        return np.array(result)
+        return np.array([result])
 
 # convo = Convolution(num_filter =  1, input_size = (3,3,2),filter_size = (2,2))
 # convo2 = Convolution(num_filter = 2,filter_size=(2,2))
 # input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]]
 # output = convo.call(input)
 # output2 = convo2.call(output)
-# print(output2.shape)
-# print(convo2.__dict__)
+# # print(output2.shape)
+# # print(convo2.__dict__)
 # backprop1 = convo2.back_propagation(output2,2)
 
 

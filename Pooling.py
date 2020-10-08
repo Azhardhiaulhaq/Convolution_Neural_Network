@@ -70,7 +70,6 @@ class Pooling(Layer):
 
     def back_propagation(self,error,momentum):
         result = np.zeros(self.input_shape)
-        print(self.input)
         for i in range(len(error)):
             for j in range(len(error[0])):
                 for k in range(len(error[0][0])):
