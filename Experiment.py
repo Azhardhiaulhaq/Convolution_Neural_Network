@@ -71,7 +71,8 @@ class Experiment:
         
         kf = KFold(n_splits=k)
 
-        models = []
+        best_model = create_model()
+        best_accuracy = -999
 
         for train_index, test_index in kf.split(list_images):
             training_data, testing_data = list_images[train_index], list_images[test_index]
@@ -84,10 +85,11 @@ class Experiment:
 
             accuracy = accuracy_score(testing_label, pred_label)
             print("Accuracy : ", accuracy)
-
-            models.append(model)
+            
+            if(accuracy > best_accuracy):
+                best_model = model
         
-        return models
+        return best_model
     
     def create_model():
         model = MyCNN()
@@ -124,5 +126,5 @@ class Experiment:
 
         # schema_split(model, train_data, train_label)
         # model.save('Shceme_split.json')
-        models = schema_cross_validation(model, 10, train_data, train_label)
-        model.save('schema_cross_validation_1_epoch.json') #ini gimana
+        model = schema_cross_validation(model, 10, train_data, train_label)
+        model.save('schema_cross_validation_1_epoch.json') 
