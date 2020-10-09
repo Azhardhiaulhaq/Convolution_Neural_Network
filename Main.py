@@ -9,7 +9,7 @@ from MyCNN import MyCNN
 from Dense import Dense
 import cv2
 from PIL import Image
-from keras.preprocessing.image import array_to_img
+from tensorflow.keras.preprocessing.image import array_to_img
 
 class Main:
     def __init__(self):
@@ -58,18 +58,22 @@ class Main:
         model.add(Dense(256,"relu"))
         model.add(Dense(1,"sigmoid"))
 
-        for i in range(len(list_images)) :
-            print('Iterasi ke - ' + str(i+1))
-            predict = model.forward_prop(list_images[i])
-            if (predict[0] > treshold):
-                list_predictions.append(1)
-            else :
-                list_predictions.append(0)
-            
+        # for i in range(len(list_images)) :
+        #     print('Iterasi ke - ' + str(i+1))
+        #     predict = model.forward_prop(list_images[i])
+        #     if (predict[0] > treshold):
+        #         list_predictions.append(1)
+        #     else :
+        #         list_predictions.append(0)
+        #     break
+        model.fit(images[:5],labels[:5], 2, 0.5, 0.5, 2)
+                    
         
-        print('| Predictions    | Labels    |')
-        for i in range(len(list_labels)):
-            print('| ' + str(list_predictions[i]) + '\t| ' + str(list_labels[i]) + '\t|')
+        # print('| Predictions    | Labels    |')
+        # for i in range(len(list_labels)):
+        #     print('| ' + str(list_predictions[i]) + '\t| ' + str(list_labels[i]) + '\t|')
+
+        # TEST 2
             
 
 

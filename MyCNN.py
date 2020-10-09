@@ -2,6 +2,7 @@ import functools
 from Layer import Layer
 import cv2
 import jsonpickle
+import numpy as np
 
 class MyCNN:
     def __init__(self, 
@@ -35,20 +36,55 @@ class MyCNN:
             input_data = output
         return output
 
-    # TODO 
-    def backward_prop(self):
-        pass
-
     # TODO
-    def fit(self):
-        pass
+    def predict(self, X):
+        label = []
+        for data in X:
+            label.append(self.forward_prop(X[i]))
+        return label
 
-    def save(self, filename):
-        layer_json = jsonpickle.encode(self.layers, indent=1)
+    # backward_prop
+    def backward_prop(self, error, momentum):
+        for layer in reversed(self.layers):
+            error = layer.back_propagation(error, momentum)
+        return error
 
-        with open(filename, "w") as file_io:
-            print(layer_json, file=file_io)
+    # Update All Weight on all Layer
+    def update(self, learning_rate):
+        for layer in self.layers:
+            layer.update(learning_rate)
+
+    def printlayer(self):
+        for layer in self.layers:
+            print(layer.__dict__)
     
-    def load(self, filename):
-        file_io = open(filename,"r")
-        self.layers = jsonpickle.decode(file_io.read())
+    def create_mini_batches(self, X, y, batch_size):
+        X_mini_batches = [] 
+        y_mini_batches = []
+        data = list(zip(X, y))
+        np.random.shuffle(data)
+        X, y = zip(*data)
+
+        for i in range(len(X)):
+            if i * batch_size >= len(X):
+                break 
+            X_mini_batches.append(X[i * batch_size:(i + 1)*batch_size]) 
+            y_mini_batches.append(y[i * batch_size:(i + 1)*batch_size])
+        
+        return X_mini_batches, y_mini_batches
+        
+    # fit trains model
+    def fit(self, X, y, epoch, learning_rate, momentum, batch_size):
+        X_mini_batches, y_mini_batches = self.create_mini_batches(X, y, batch_size)
+        data_batches = list(zip(X_mini_batches, y_mini_batches))
+
+        for i in range(epoch):
+            for data in data_batches:
+                for data_X, data_y in zip(*data):
+                    print("forward prop")
+                    output = self.forward_prop(X[i])
+                    print("backward prop")
+                    self.backward_prop(output, momentum)
+                print("update")
+                self.update(learning_rate)
+            
