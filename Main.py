@@ -35,7 +35,7 @@ class Main:
         treshold = 0.5
 
         train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-            directory='test/',
+            directory='/content/drive/My Drive/train/',
             labels='inferred',
             label_mode='int',
             batch_size=40,
