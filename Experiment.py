@@ -89,10 +89,10 @@ class Experiment:
         test_data = []
         test_label = []
         
-        dataset_path = "./train"
+        dataset_path = "/content/drive/My Drive/Colab Notebooks/CNN/train"
         train_data, train_label = read_image(dataset_path)
 
-        dataset_path = "./test"
+        dataset_path = "/content/drive/My Drive/Colab Notebooks/CNN/test"
         test_data, test_label = read_image(dataset_path)
 
         model = MyCNN()
