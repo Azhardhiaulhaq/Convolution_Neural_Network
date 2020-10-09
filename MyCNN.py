@@ -37,8 +37,11 @@ class MyCNN:
         return output
 
     # TODO
-    def predict(self,X):
-        pass
+    def predict(self, X):
+        label = []
+        for data in X:
+            label.append(self.forward_prop(X[i]))
+        return label
 
     # backward_prop
     def backward_prop(self, error, momentum):
@@ -82,5 +85,6 @@ class MyCNN:
                     output = self.forward_prop(X[i])
                     print("backward prop")
                     self.backward_prop(output, momentum)
+                print("update")
                 self.update(learning_rate)
             
