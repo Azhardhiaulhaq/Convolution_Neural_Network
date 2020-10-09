@@ -106,5 +106,5 @@ class Experiment:
         model.add(Dense(256,"relu"))
         model.add(Dense(1,"sigmoid"))
 
-        schema_split(model, train_data, test_label)
-        schema_cross_validation(model, train_data, test_label)
+        schema_split(model, train_data, train_label)
+        # schema_cross_validation(model, train_data, train_label)
