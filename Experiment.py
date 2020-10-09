@@ -67,13 +67,17 @@ class Experiment:
         print("| tn |", tn)
         print("| fn |", fn)
 
-    def schema_cross_validation(model, k, list_images, list_labels):
+    def schema_cross_validation(k, list_images, list_labels):
         
         kf = KFold(n_splits=k)
+
+        models = []
 
         for train_index, test_index in kf.split(list_images):
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
+
+            model = create_model()
            
             model.fit(training_data, training_label, epoch=1, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
             pred_label = model.predict(testing_data) # PREDICT DATA
@@ -81,6 +85,9 @@ class Experiment:
             accuracy = accuracy_score(testing_label, pred_label)
             print("Accuracy : ", accuracy)
 
+            models.append(model)
+        
+        return models
     
     def create_model():
         model = MyCNN()
@@ -117,5 +124,5 @@ class Experiment:
 
         # schema_split(model, train_data, train_label)
         # model.save('Shceme_split.json')
-        schema_cross_validation(model, 10, train_data, train_label)
-        model.save('schema_cross_validation_1_epoch.json')
+        models = schema_cross_validation(model, 10, train_data, train_label)
+        model.save('schema_cross_validation_1_epoch.json') #ini gimana
