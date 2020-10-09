@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 from Detector import Detector
 from Pooling import Pooling
 from Flatten import Flatten
-from MyCNN import MyCNN
+# from MyCNN import MyCNN
 import random
 import cv2
 from Layer import Layer
@@ -78,14 +78,18 @@ class Convolution(Layer):
         for i in range(len(input)):
             for j in range(len(input[0])):
                 result = result + input[i][j]*filter[i][j]
-        return result + self.bias
+        return result 
     
     def call(self, input):
         if(len(self.filters) == 0):
             self.filters = np.random.uniform(-1,1,size = (self.num_filter,len(input),self.filter_size[0],self.filter_size[1]))
             self.input_size = (len(input[0][0]),len(input[0]),len(input))
         self.input = self.resize_matrix(input)
-        return self.convolution(self.input,self.filters)
+        self.bias = np.random.uniform(-1,1,size =(len(self.filters)))
+        result = self.convolution(self.input,self.filters)
+        for i in range(len(result)):
+            result[i] += self.bias[i]
+        return result 
     
     def back_propagation(self,error,target_weight):
         if(target_weight == True):
@@ -105,17 +109,16 @@ class Convolution(Layer):
     def weights_derivative(self,error) : 
         for i in range(len(error)):
                 error[i] = self.add_padding(error[i],1)
-        filter = [[[[0,1],[-1,0]]],[[[2,3],[4,5]]]]
-        error = self.convolution(error,filter,type='full')
+        error = self.convolution(error,self.filters,type='full')
         result = np.zeros((len(error[0]),len(error[0][0])))
         for i in range(len(error)):
             result = result + error[i]
         return result
 
-# input = [[[16,24,32],[47,18,26],[68,12,9]]] 
-# convo = Convolution(num_filter =  2, input_size = (3,3,1),filter_size = (2,2))
-# output = convo.call(input)
-# print(output)
+input = [[[16,24,32],[47,18,26],[68,12,9]]] 
+convo = Convolution(num_filter =  2, input_size = (3,3,1),filter_size = (2,2))
+output = convo.call(input)
+print(output)
 # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 # error = [[[0,0],[-0.000029450,0]],[[0,0],[0.00000639539,0]]]
 # output_error = convo.back_propagation(error,False)
