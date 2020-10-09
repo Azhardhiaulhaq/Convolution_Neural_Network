@@ -72,6 +72,8 @@ class Main:
         # print('| Predictions    | Labels    |')
         # for i in range(len(list_labels)):
         #     print('| ' + str(list_predictions[i]) + '\t| ' + str(list_labels[i]) + '\t|')
+
+        # TEST 
             
 
 
