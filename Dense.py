@@ -86,19 +86,4 @@ class Dense(Layer) :
             result.append(np.dot(error,self.weights[:,i]))
         return np.array(result[:-1])
 
-# input = [10,0]
-# dense = Dense(10,"relu")
-# output = dense.call(input)
-# dense2 = Dense(1,"sigmoid")
-# output2 = dense2.call(output)
-# print(output2)
-# print('-----------')
-# backprop1 = dense2.back_propagation(output2,2)
-# print(dense2.__dict__)
-# print(backprop1)
-# error = [2,1,0,10,-3,5,10,7,-4,-8]
 
-# dense.back_propagation(error)
-# print(dense.__dict__)
-# dense.update(1)
-# print(dense.__dict__)

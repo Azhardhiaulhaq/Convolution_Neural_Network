@@ -99,6 +99,7 @@ class Experiment:
         model.add(Flatten())
         model.add(Dense(256,"relu"))
         model.add(Dense(1,"sigmoid"))
+        return model
 
     if __name__ == "__main__":
         
@@ -113,18 +114,29 @@ class Experiment:
         dataset_path = "test"
         test_data, test_label = read_image(dataset_path)
 
-        model = create_model()
-        # model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
-        # model.add(Detector())
-        # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        # # model.add(Convolution(num_filter =  8,filter_size = (3,3)))
-        # # model.add(Detector())
-        # # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        # model.add(Flatten())
-        # model.add(Dense(256,"relu"))
-        # model.add(Dense(1,"sigmoid"))
+        model_split = create_model()
+        schema_split(model_split, train_data, train_label)
+        model_split.save('Scheme_split.json')
+        pred_label = model_split.predict(test_data)
+        acc = accuracy_score(test_label,pred_label)
+        print('Accuracy : ',acc)
 
-        # schema_split(model, train_data, train_label)
-        # model.save('Shceme_split.json')
-        model = schema_cross_validation(model, 10, train_data, train_label)
-        model.save('schema_cross_validation_1_epoch.json') 
+        print("Confussion Matrix : ")
+        tn, fp, fn, tp = confusion_matrix(testing_label, pred_label).ravel()
+        print("| tp |", tp)
+        print("| fp |", fp)
+        print("| tn |", tn)
+        print("| fn |", fn)
+
+        model_crossval = schema_cross_validation(model_crossval, 10, train_data, train_label)
+        model_crossval.save('schema_cross_validation_1_epoch.json') 
+        pred_label = model_crossval.predict(test_data)
+        acc = accuracy_score(test_label,pred_label)
+        print('Accuracy : ',acc)
+
+        print("Confussion Matrix : ")
+        tn, fp, fn, tp = confusion_matrix(testing_label, pred_label).ravel()
+        print("| tp |", tp)
+        print("| fp |", fp)
+        print("| tn |", tn)
+        print("| fn |", fn)

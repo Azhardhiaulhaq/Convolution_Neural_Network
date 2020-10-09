@@ -76,12 +76,3 @@ class Pooling(Layer):
                     position = np.where(self.input == self.result_pooling[i][j][k])
                     result[position[0][0]][position[1][0]][position[2][0]] = error[i][j][k]
         return result
-
-
-# input = np.asarray([[[0,76,64],[109,0,10],[118,71,67]],[[0,0,66],[0,102,0],[0,0,0]]])
-# print(np.where(input == 109))
-# pool = Pooling(filter_size=(3,3), stride_size=1, mode="max")
-# out = pool.call(input)
-
-# result = pool.back_propagation([[[0.079]],[[0.239]]])
-# print(result)
