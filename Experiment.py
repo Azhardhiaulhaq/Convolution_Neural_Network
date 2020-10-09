@@ -54,7 +54,7 @@ class Experiment:
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
 
-        model.fit(training_data, training_label, epoch=10, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
+        model.fit(training_data, training_label, epoch=3, learning_rate=0.5, momentum=0.5, batch_size=40) # TRAIN MODEL
         pred_label = model.predict(testing_data) # PREDICT DATA
             
         accuracy = accuracy_score(testing_label, pred_label)

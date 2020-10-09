@@ -87,6 +87,7 @@ class MyCNN:
                     self.backward_prop(output, momentum)
                 print("update")
                 self.update(learning_rate)
+            print('selesai 1 epoch')
             
     def save(self, filename):
         layer_json = jsonpickle.encode(self.layers, indent=1)
