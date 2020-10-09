@@ -54,8 +54,8 @@ class Experiment:
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
 
-        model.fit(training_data, training_label, epochs=10, verbose=2) # TRAIN MODEL
-        pred_label = model.predict_classes(testing_data, batch_size=10) # PREDICT DATA
+        model.fit(training_data, training_label, epoch=10, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
+        pred_label = model.predict(testing_data) # PREDICT DATA
             
         accuracy = accuracy_score(testing_label, pred_label)
         print("Accuracy : ", accuracy)
@@ -75,58 +75,36 @@ class Experiment:
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
            
-            model.fit(training_data, training_label, epochs=5, verbose=2) # TRAIN MODEL
-            pred_label = model.predict_classes(testing_data, batch_size=k) # PREDICT DATA
+            model.fit(training_data, training_label, epoch=10, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
+            pred_label = model.predict(testing_data) # PREDICT DATA
 
             accuracy = accuracy_score(testing_label, pred_label)
             print("Accuracy : ", accuracy)
 
     
     if __name__ == "__main__":
-        list_images = []
-        list_labels = []
-        list_predictions = []
-        treshold = 0.5
-
+        
+        train_data = []
+        train_label = []
+        test_data = []
+        test_label = []
+        
         dataset_path = "./train"
         train_data, train_label = read_image(dataset_path)
-        for data in train_data:
-            list_images.append(data)
-        for label in train_label:
-            list_labels.append(label) 
 
         dataset_path = "./test"
         test_data, test_label = read_image(dataset_path)
-        for data in test_data:
-            list_images.append(data)
-        for label in test_label:
-            list_labels.append(label)
 
-        # model = MyCNN()
-        # model.add(Convolution(num_filter =  4, input_size = (150,150,3), filter_size = (3,3)))
-        # model.add(Detector())
-        # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        # model.add(Convolution(num_filter =  8,filter_size = (3,3)))
-        # model.add(Detector())
-        # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        # model.add(Flatten())
-        # model.add(Dense(256,"relu"))
-        # model.add(Dense(1,"sigmoid"))
+        model = MyCNN()
+        model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
+        model.add(Detector())
+        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        model.add(Convolution(num_filter =  8,filter_size = (3,3)))
+        model.add(Detector())
+        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        model.add(Flatten())
+        model.add(Dense(256,"relu"))
+        model.add(Dense(1,"sigmoid"))
 
-        # MODEL MACHINE LEARNING
-        model = tf.keras.models.Sequential([
-            tf.keras.layers.Conv2D(16, (2,2), activation='relu', input_shape=(150, 150, 3)),
-            tf.keras.layers.AveragePooling2D(2,2),
-            tf.keras.layers.Conv2D(32, (2,2), activation='relu'),
-            tf.keras.layers.AveragePooling2D(2,2), 
-            tf.keras.layers.Conv2D(64, (3,3), activation='relu'), 
-            tf.keras.layers.AveragePooling2D(2,2),
-            tf.keras.layers.Flatten(), 
-            tf.keras.layers.Dense(512, activation='relu'), 
-            tf.keras.layers.Dense(1, activation='sigmoid')  
-        ])
-
-        model.compile(optimizer=RMSprop(lr=0.0001), loss='binary_crossentropy', metrics = ['accuracy'])
-
-        list_images = np.array(list_images)
-        list_labels = np.array(list_labels)
+        schema_split(model, train_data, test_label)
+        schema_cross_validation(model, train_data, test_label)
