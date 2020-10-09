@@ -107,4 +107,5 @@ class Experiment:
         model.add(Dense(1,"sigmoid"))
 
         schema_split(model, train_data, train_label)
+        model.save('Shceme_split.json')
         # schema_cross_validation(model, train_data, train_label)

@@ -88,3 +88,12 @@ class MyCNN:
                 print("update")
                 self.update(learning_rate)
             
+    def save(self, filename):
+        layer_json = jsonpickle.encode(self.layers, indent=1)
+
+        with open(filename, "w") as file_io:
+            print(layer_json, file=file_io)
+
+    def load(self, filename):
+        file_io = open(filename,"r")
+        self.layers = jsonpickle.decode(file_io.read()) 
