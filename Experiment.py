@@ -10,7 +10,7 @@ from MyCNN import MyCNN
 from Dense import Dense
 import cv2, os
 from PIL import Image
-from keras.preprocessing.image import array_to_img
+from tensorflow.keras.preprocessing.image import array_to_img
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
@@ -71,17 +71,26 @@ class Experiment:
         
         kf = KFold(n_splits=k)
 
-        for train_index, test_index in kf.split(input_data):
+        for train_index, test_index in kf.split(list_images):
             training_data, testing_data = list_images[train_index], list_images[test_index]
             training_label, testing_label = list_labels[train_index], list_labels[test_index]
            
-            model.fit(training_data, training_label, epoch=10, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
+            model.fit(training_data, training_label, epoch=1, learning_rate=0.5, momentum=0.5, batch_size=2) # TRAIN MODEL
             pred_label = model.predict(testing_data) # PREDICT DATA
 
             accuracy = accuracy_score(testing_label, pred_label)
             print("Accuracy : ", accuracy)
 
     
+    def create_model():
+        model = MyCNN()
+        model.add(Convolution(num_filter= 4, input_size=(150,150,3), filter_size=(3,3)))
+        model.add(Detector())
+        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        model.add(Flatten())
+        model.add(Dense(256,"relu"))
+        model.add(Dense(1,"sigmoid"))
+
     if __name__ == "__main__":
         
         train_data = []
@@ -89,23 +98,24 @@ class Experiment:
         test_data = []
         test_label = []
         
-        dataset_path = "/content/drive/My Drive/Colab Notebooks/CNN/train"
+        dataset_path = "train"
         train_data, train_label = read_image(dataset_path)
 
-        dataset_path = "/content/drive/My Drive/Colab Notebooks/CNN/test"
+        dataset_path = "test"
         test_data, test_label = read_image(dataset_path)
 
-        model = MyCNN()
-        model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
-        model.add(Detector())
-        model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        # model.add(Convolution(num_filter =  8,filter_size = (3,3)))
+        model = create_model()
+        # model.add(Convolution(num_filter =  4, input_size = (150,150,3),filter_size = (3,3)))
         # model.add(Detector())
         # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
-        model.add(Flatten())
-        model.add(Dense(256,"relu"))
-        model.add(Dense(1,"sigmoid"))
+        # # model.add(Convolution(num_filter =  8,filter_size = (3,3)))
+        # # model.add(Detector())
+        # # model.add(Pooling(filter_size=(2,2), stride_size=1, mode="max"))
+        # model.add(Flatten())
+        # model.add(Dense(256,"relu"))
+        # model.add(Dense(1,"sigmoid"))
 
-        schema_split(model, train_data, train_label)
-        model.save('Shceme_split.json')
-        # schema_cross_validation(model, train_data, train_label)
+        # schema_split(model, train_data, train_label)
+        # model.save('Shceme_split.json')
+        schema_cross_validation(model, 10, train_data, train_label)
+        model.save('schema_cross_validation_1_epoch.json')

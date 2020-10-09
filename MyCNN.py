@@ -40,7 +40,7 @@ class MyCNN:
     def predict(self, X):
         label = []
         for data in X:
-            label.append(self.forward_prop(X[i]))
+            label.append(self.forward_prop(data))
         return label
 
     # backward_prop
