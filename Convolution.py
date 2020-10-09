@@ -151,14 +151,14 @@ class Convolution(Layer):
             result += filters
         return result
 
-input = [[[16,24,32],[47,18,26],[68,12,9]]] 
-convo = Convolution(num_filter =  2, input_size = (3,3,1),filter_size = (2,2))
-output = convo.call(input)
-print(output)
-# print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-error = [[[0,0],[-0.000029450,0]],[[0,0],[0.00000639539,0]]]
-output_error = convo.back_propagation(error,2)
-print(output_error)   
+# input = [[[16,24,32],[47,18,26],[68,12,9]]] 
+# convo = Convolution(num_filter =  2, input_size = (3,3,1),filter_size = (2,2))
+# output = convo.call(input)
+# print(output)
+# # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+# error = [[[0,0],[-0.000029450,0]],[[0,0],[0.00000639539,0]]]
+# output_error = convo.back_propagation(error,2)
+# print(output_error)   
 
 
 # print(convo.__dict__)
