@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 from Detector import Detector
 from Pooling import Pooling
 from Flatten import Flatten
-from MyCNN import MyCNN
+# from MyCNN import MyCNN
 import random
 import cv2
 from Layer import Layer
@@ -94,7 +94,7 @@ class Convolution(Layer):
         for i in range(len(input)):
             for j in range(len(input[0])):
                 result = result + input[i][j]*filter[i][j]
-        return result + self.bias
+        return result 
 
     def call(self, input):
         if(len(self.filters) == 0):
@@ -102,14 +102,23 @@ class Convolution(Layer):
                 self.num_filter, len(input), self.filter_size[0], self.filter_size[1]))
             self.input_size = (len(input[0][0]), len(input[0]), len(input))
         self.input = self.resize_matrix(input)
-        return self.convolution(self.input, self.filters, type='forward')
+        self.bias = np.random.uniform(-1,1,size=(len(self.filters)))
+        result = self.convolution(self.input, self.filters, type='forward')
+        for i in range(len(result)):
+            result[i] += self.bias[i]
+        return result
 
     def back_propagation(self, error, momentum):
         if self.delta_weights is None:
             self.delta_weights = self.weights_derivative(error)
+            self.delta_bias = np.zeros(self.bias.shape)
         else:
             self.delta_weights = self.weights_derivative(
                 error) + momentum*self.delta_weights
+            d_bias = np.zeros(self.bias.shape)
+            for i in range(len(error)):
+                d_bias[i] = error[i].sum()
+            self.delta_bias = d_bias + momentum*self.delta_bias
         return self.input_derivative(error)
 
     def weights_derivative(self, error):
@@ -124,9 +133,11 @@ class Convolution(Layer):
     def update(self, learning_rate):
         assert self.filters.shape == self.delta_weights.shape
         self.filters -= learning_rate *self.delta_weights
+        self.bias -= learning_rate * self.delta_bias
         # self.filters = np.array([[channel - learning_rate*delta_weight for channel in filters]
         #                          for (filters, delta_weight) in zip(self.filters, self.delta_weights)])
         self.delta_weights = None
+        self.delta_bias = 0
 
     def input_derivative(self, error):
         padded_error = list()
@@ -141,18 +152,20 @@ class Convolution(Layer):
         return np.array(result)
 
 # convo = Convolution(num_filter =  2, input_size = (3,3,2),filter_size = (2,2))
-# # convo2 = Convolution(num_filter = 2,filter_size=(2,2))
+# convo2 = Convolution(num_filter = 2,filter_size=(2,2))
 # input = [[[16,24,32],[47,18,26],[68,12,9]],[[16,24,32],[47,18,26],[68,12,9]]]
 # output = convo.call(input)
-# # output2 = convo2.call(output)
+# print(output)
+# output2 = convo2.call(output)
 # # print(output2.shape)
 # # print(convo2.__dict__)
-# backprop1 = convo.back_propagation(output,2)
+# backprop1 = convo.back_propagation(output2,2)
 # convo.update(1)
 
 # print(convo.__dict__)
 # print(backprop1.shape)
-# backprop2 = convo.back_propagation(backprop1)
+# backprop2 = convo.back_propagation(backprop1,2)
+# print(backprop2)
 # print(output)
 # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 # error = [[[0,0],[-1,0]],[[0,0],[2,0]]]
